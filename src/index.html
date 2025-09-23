@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="github-corner.css">
+</head>
+<body>
+    <!-- GitHub Corner -->
+    <a href="https://github.com/SableRaf/QRCodeGenerator" class="github-corner" aria-label="View source on GitHub">
+        <svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+            <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+            <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+            <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+        </svg>
+    </a>
+    <div class="container">
+        <div class="header">
+            <h1>QR Code Generator</h1>
+            <p>Generate QR codes for URLs, text, and more. Free and without expiration.</p>
+            <p class="privacy-note">This project is open source and the QR code generation happens entirely on your device.</p>
+        </div>
+        
+        <div class="content">
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+            
+            <div class="input-section">
+                <label for="textInput" class="input-label">Enter text or URL:</label>
+                <input 
+                    type="text" 
+                    id="textInput" 
+                    class="input-field" 
+                    placeholder="https://example.com or any text..."
+                    autocomplete="off"
+                    spellcheck="false"
+                    value=""
+                >
+            </div>
+            
+            <div class="button-group">
+                <button id="generateBtn" class="btn btn-primary">
+                    Generate QR Code
+                </button>
+                <button id="downloadBtn" class="btn btn-secondary" disabled>
+                    Download PNG
+                </button>
+            </div>
+            
+            <div class="qr-display" id="qrDisplay">
+                <div class="placeholder">Enter text above and click "Generate QR Code"</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    
+    <script>
+        class QRGenerator {
+            constructor() {
+                this.textInput = document.getElementById('textInput');
+                this.generateBtn = document.getElementById('generateBtn');
+                this.downloadBtn = document.getElementById('downloadBtn');
+                this.qrDisplay = document.getElementById('qrDisplay');
+                this.errorMessage = document.getElementById('errorMessage');
+                this.successMessage = document.getElementById('successMessage');
+                this.currentQRCode = null;
+                this.libraryLoaded = false;
+                
+                this.checkLibraryAndInit();
+            }
+            
+            checkLibraryAndInit() {
+                // Check if QR code library is loaded
+                if (typeof qrcode !== 'undefined') {
+                    this.libraryLoaded = true;
+                    this.initEventListeners();
+                    this.setInitialValue();
+                } else {
+                    // Wait a bit more for library to load
+                    setTimeout(() => {
+                        if (typeof qrcode !== 'undefined') {
+                            this.libraryLoaded = true;
+                            this.initEventListeners();
+                            this.setInitialValue();
+                        } else {
+                            this.showError('QR code library failed to load. Please refresh the page.');
+                        }
+                    }, 1000);
+                }
+            }
+            
+            initEventListeners() {
+                this.generateBtn.addEventListener('click', () => this.generateQRCode());
+                this.downloadBtn.addEventListener('click', () => this.downloadQRCode());
+                
+                // Generate on Enter key
+                this.textInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.generateQRCode();
+                    }
+                });
+                
+                // Auto-generate on input change (with debounce)
+                let timeout;
+                this.textInput.addEventListener('input', () => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        if (this.textInput.value.trim()) {
+                            this.generateQRCode();
+                        }
+                    }, 500);
+                });
+            }
+            
+            setInitialValue() {
+                // Set example.com as default
+                this.textInput.value = 'https://example.com';
+                // Generate initial QR code
+                setTimeout(() => this.generateQRCode(), 100);
+            }
+            
+            showError(message) {
+                this.errorMessage.textContent = message;
+                this.errorMessage.style.display = 'block';
+                this.successMessage.style.display = 'none';
+            }
+            
+            showSuccess(message) {
+                this.successMessage.textContent = message;
+                this.successMessage.style.display = 'block';
+                this.errorMessage.style.display = 'none';
+                
+                // Auto-hide after 3 seconds
+                setTimeout(() => {
+                    this.successMessage.style.display = 'none';
+                }, 3000);
+            }
+            
+            hideMessages() {
+                this.errorMessage.style.display = 'none';
+                this.successMessage.style.display = 'none';
+            }
+            
+            generateQRCode() {
+                const inputText = this.textInput.value.trim();
+                
+                if (!inputText) {
+                    this.showError('Please enter some text or a URL');
+                    return;
+                }
+                
+                if (!this.libraryLoaded) {
+                    this.showError('QR code library is still loading. Please wait a moment and try again.');
+                    return;
+                }
+                
+                try {
+                    // Show loading state
+                    this.generateBtn.innerHTML = '<span class="loading"></span>Generating...';
+                    this.generateBtn.disabled = true;
+                    
+                    // Create QR code - using the correct function name
+                    const qr = qrcode(0, 'M'); // Medium error correction
+                    qr.addData(inputText);
+                    qr.make();
+                    
+                    // Create image with custom styling
+                    const cellSize = 8;
+                    const margin = 20;
+                    const qrImg = qr.createImgTag(cellSize, margin, "QR Code");
+                    
+                    // Update display
+                    this.qrDisplay.innerHTML = qrImg;
+                    
+                    // Store current QR code for download
+                    this.currentQRCode = qr;
+                    
+                    // Enable download button
+                    this.downloadBtn.disabled = false;
+                    
+                    this.hideMessages();
+                    
+                } catch (error) {
+                    this.showError('Error generating QR code: ' + error.message);
+                    console.error('QR Generation Error:', error);
+                } finally {
+                    // Reset button state
+                    this.generateBtn.innerHTML = 'Generate QR Code';
+                    this.generateBtn.disabled = false;
+                }
+            }
+            
+            downloadQRCode() {
+                if (!this.currentQRCode) {
+                    this.showError('Please generate a QR code first');
+                    return;
+                }
+                
+                try {
+                    // Create canvas for download
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    const cellSize = 10;
+                    const margin = 40;
+                    const moduleCount = this.currentQRCode.getModuleCount();
+                    const size = moduleCount * cellSize + margin * 2;
+                    
+                    canvas.width = size;
+                    canvas.height = size;
+                    
+                    // Fill background
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, size, size);
+                    
+                    // Draw QR code
+                    ctx.fillStyle = '#000000';
+                    for (let row = 0; row < moduleCount; row++) {
+                        for (let col = 0; col < moduleCount; col++) {
+                            if (this.currentQRCode.isDark(row, col)) {
+                                ctx.fillRect(
+                                    col * cellSize + margin,
+                                    row * cellSize + margin,
+                                    cellSize,
+                                    cellSize
+                                );
+                            }
+                        }
+                    }
+                    
+                    // Download
+                    const link = document.createElement('a');
+                    link.download = `qrcode-${Date.now()}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    this.showSuccess('QR code downloaded successfully!');
+                    
+                } catch (error) {
+                    this.showError('Error downloading QR code. Please try again.');
+                    console.error('Download Error:', error);
+                }
+            }
+        }
+        
+        // Initialize when page loads and library is ready
+        function initApp() {
+            if (typeof qrcode !== 'undefined') {
+                new QRGenerator();
+            } else {
+                // Wait for library to load
+                setTimeout(initApp, 100);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
