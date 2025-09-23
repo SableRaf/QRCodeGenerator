@@ -1,6 +1,6 @@
 # QR Code Generator
 
-A simple, free, open-source, client-side QR code generator that creates QR codes for URLs, text, and more. 
+A simple, free, open-source, client-side [QR code generator](https://sableraf.github.io/QRCodeGenerator/) that creates QR codes for URLs, text, and more.
 
 The application runs entirely in your browser. 
 
