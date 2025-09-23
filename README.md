@@ -8,15 +8,17 @@ No data is sent to any server.
 
 The QR codes never expire.
 
+![Screenshot of QR Code Generator](.github/screencapture.png)
+
 ## The Story Behind This Tool
 
-My friend needed QR codes to promote his art space. He printed 1,000 posters with a QR code generated from a popular online service. 
+My friend had printed 1,000 posters for his art space with a QR code from a popular online service. At first everything looked fine, but after 100 scans he got a message saying he’d hit the free limit and had to pay to keep the code working. Suddenly all those posters were useless. 
 
-Everything seemed perfect, until 100 people scanned his code. That's when he got the notification: "You've exceeded your free usage limit. Pay $XX to continue service." His QR codes stopped working. 1,000 printed posters became useless overnight. This is not acceptable.
+Dynamic QR codes have their uses if you need to change the link later or track analytics, but most people just want a simple, permanent code that points to a website or profile without worrying about limits or fees.
 
-Don't get me wrong, I understand why dynamic QR codes exist. If you need to change where your QR code points without reprinting everything, or if you want analytics on who's scanning when, those services might have their place.
+I tried to find a simple and free QR code generator, but the top results were all paid or freemium services. All of them replaced your URL with their own tracking link. It really shouldn't be this hard to find such a basic tool.
 
-But, most people just need a QR code that points to their website, social media profile, or contact info. Something simple and permanent. You shouldn't need to worry about usage limits or monthly fees just to share a URL.
+So I built this simple QR code generator to fill the gap.
 
 ## Usage
 
