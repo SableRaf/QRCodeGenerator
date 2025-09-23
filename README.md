@@ -40,4 +40,4 @@ This project was generated with the help of Claude Code.
 
 ## License
 
-This project is licensed under the GPL 2.0 License.
+This project is licensed under the GPL 3.0 License.
