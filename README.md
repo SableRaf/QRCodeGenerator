@@ -18,4 +18,4 @@ A simple, client-side QR code generator that creates QR codes for URLs, text, an
 
 ## License
 
-This project is licensed under the GPL 2.0 License. See the [LICENSE](LICENSE.md) file for details.
+This project is licensed under the GPL 2.0 License.
