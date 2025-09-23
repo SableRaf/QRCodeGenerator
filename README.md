@@ -10,16 +10,6 @@ The QR codes never expire.
 
 ![Screenshot of QR Code Generator](.github/screencapture.png)
 
-## The Story Behind This Tool
-
-My friend had printed 1,000 posters for his art space with a QR code from a popular online service. At first everything looked fine, but after 100 scans he got a message saying he’d hit the free limit and had to pay to keep the code working. Suddenly all those posters were useless. 
-
-Dynamic QR codes have their uses if you need to change the link later or track analytics, but most people just want a simple, permanent code that points to a website or profile without worrying about limits or fees.
-
-I tried to find a simple and free QR code generator, but the top results were all paid or freemium services. All of them replaced your URL with their own tracking link. It really shouldn't be this hard to find such a basic tool.
-
-So I built this simple QR code generator to fill the gap.
-
 ## Usage
 
 1. Go to https://sableraf.github.io/QRCodeGenerator/ (hosted on GitHub Pages)
@@ -33,6 +23,16 @@ So I built this simple QR code generator to fill the gap.
 - CSS3
 - Vanilla JavaScript
 - [qrcode-generator](https://github.com/davidshimjs/qrcodejs) library
+
+## The Story Behind This Tool
+
+My friend had printed 1,000 posters for his art space with a QR code from a popular online service. At first everything looked fine, but after 100 scans he got a message saying he’d hit the free limit and had to pay to keep the code working. Suddenly all those posters were useless. 
+
+Dynamic QR codes have their uses if you need to change the link later or track analytics, but most people just want a simple, permanent code that points to a website or profile without worrying about limits or fees.
+
+I tried to find a simple and free QR code generator, but the top results were all paid or freemium services. All of them replaced your URL with their own tracking link. It really shouldn't be this hard to find such a basic tool.
+
+So I built this simple QR code generator to fill the gap.
 
 ## Disclosure
 
