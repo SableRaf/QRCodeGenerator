@@ -2,7 +2,11 @@
 
 A simple, free, open-source, client-side QR code generator that creates QR codes for URLs, text, and more. 
 
-The application runs entirely in your browser. No data is sent to any server.
+The application runs entirely in your browser. 
+
+No data is sent to any server.
+
+The QR codes never expire.
 
 ## The Story Behind This Tool
 
