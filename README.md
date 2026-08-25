@@ -13,16 +13,16 @@ The QR codes never expire.
 ## Usage
 
 1. Go to https://sableraf.github.io/QRCodeGenerator/ (hosted on GitHub Pages)
-2. Enter any text or URL in the input field
-3. Click "Generate QR Code" or press Enter
-4. Click "Download PNG" to save the QR code image
+2. Enter any text or URL and see the QR code update live
+3. Choose an export size, colour, and transparent or white background
+4. Download the PNG or copy it directly to your clipboard
 
 ## Tech Stack
 
 - HTML5
 - CSS3
 - Vanilla JavaScript
-- [qrcode-generator](https://github.com/davidshimjs/qrcodejs) library
+- [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) library
 
 ## The Story Behind This Tool
 

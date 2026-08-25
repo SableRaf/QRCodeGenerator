@@ -1,5 +1,36 @@
+.github-corner {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    width: 80px;
+    height: 80px;
+    color: #fff;
+}
+
 .github-corner svg {
+    display: block;
+    width: 80px;
+    height: 80px;
     clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.github-corner .octo-corner {
+    fill: #111113;
+}
+
+.github-corner .octo-arm,
+.github-corner .octo-body {
+    fill: currentColor;
+}
+
+.github-corner .octo-arm {
+    transform-origin: 130px 106px;
+}
+
+.github-corner:focus-visible {
+    outline: 2px solid #111113;
+    outline-offset: -2px;
 }
 
 .github-corner:hover .octo-arm {
@@ -33,6 +64,12 @@
 }
 
 @media (max-width: 500px) {
+    .github-corner,
+    .github-corner svg {
+        width: 64px;
+        height: 64px;
+    }
+
     .github-corner:hover .octo-arm {
         animation: none;
     }
