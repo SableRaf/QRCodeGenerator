@@ -70,7 +70,7 @@ body {
 /* ---------------- layout ---------------- */
 .layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 28px;
   align-items: stretch;        /* both cards share the taller height */
   max-width: 940px;
@@ -78,12 +78,13 @@ body {
 }
 
 @media (max-width: 880px) {
-  .layout { grid-template-columns: 1fr; }
+  .layout { grid-template-columns: minmax(0, 1fr); }
 }
 
 .card {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   gap: 22px;
   padding: 24px;
   background: var(--card);
@@ -190,12 +191,16 @@ input[type="color"]::-moz-color-swatch { border: none; border-radius: 6px; }
 .range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px rgb(17 17 19 / 15%); }
 
 /* ---------------- preset swatches ---------------- */
-.swatches { display: flex; gap: 8px; flex-wrap: nowrap; }
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 26px));
+  gap: min(8px, 1vw);
+}
 
 .swatch {
-  width: 26px;
-  height: 26px;
-  flex: 0 0 auto;
+  width: 100%;
+  max-width: 26px;
+  aspect-ratio: 1;
   padding: 0;
   border: none;
   border-radius: 50%;
@@ -268,8 +273,8 @@ input[type="color"]::-moz-color-swatch { border: none; border-radius: 6px; }
 /* fixed window: bigger codes are shown at full size and cropped */
 .stage {
   position: relative;
-  width: var(--stage);
-  height: var(--stage);
+  width: min(var(--stage), 100%);
+  aspect-ratio: 1;
   overflow: hidden;
 }
 
@@ -379,20 +384,10 @@ input[type="text"][aria-invalid="true"] { border-color: #dc2626; }
   opacity: 0.45;
 }
 
-@media (max-width: 420px) {
+@media (max-width: 434px) {
   body { padding: 72px 18px 28px; }
 
   .card { padding: 20px; }
 
-  .stage {
-    width: min(var(--stage), calc(100vw - 76px));
-    height: min(var(--stage), calc(100vw - 76px));
-  }
-
   .swatches { gap: 6px; }
-
-  .swatch {
-    width: 24px;
-    height: 24px;
-  }
 }
