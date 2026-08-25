@@ -303,11 +303,14 @@ input[type="color"]::-moz-color-swatch { border: none; border-radius: 6px; }
 }
 
 .note {
+  min-height: 2.9em;
   margin: 0;
   font-size: 11.5px;
   color: var(--muted);
   text-align: center;
 }
+
+.note.is-hidden { visibility: hidden; }
 
 /* ---------------- buttons ---------------- */
 .actions { display: flex; gap: 10px; }

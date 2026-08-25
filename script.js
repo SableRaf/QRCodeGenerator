@@ -122,7 +122,7 @@ function drawQRCode(qr, size) {
 
 function showNote(message, isError = false) {
   elements.note.textContent = message;
-  elements.note.hidden = !message;
+  elements.note.classList.toggle("is-hidden", !message);
   elements.note.classList.toggle("is-error", isError);
 }
 
