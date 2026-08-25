@@ -34,6 +34,8 @@ I tried to find a simple and free QR code generator, but the top results were al
 
 So I built this simple QR code generator to fill the gap.
 
+I later found out about Adrian Chiapello's [qr.cc-france.org](https://qr.cc-france.org/) project. I was inspired by his work and decided to rebuild this project from scratch, inspired by his design.
+
 ## Disclosure
 
 This project was generated with the help of Claude Code.
