@@ -120,6 +120,15 @@
       </p>
     </footer>
 
+    <div id="export-dialog" class="export-dialog is-hidden" role="dialog" aria-modal="true" aria-labelledby="export-dialog-title">
+      <div class="export-dialog-card">
+        <h2 id="export-dialog-title">Copy QR code</h2>
+        <p id="export-dialog-instruction">Touch and hold the image, then choose Copy.</p>
+        <img id="export-dialog-image" alt="Generated QR code" />
+        <button id="export-dialog-close" class="btn btn-primary" type="button">Done</button>
+      </div>
+    </div>
+
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script src="script.js"></script>

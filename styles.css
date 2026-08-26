@@ -359,6 +359,50 @@ input[type="color"]::-moz-color-swatch { border: none; border-radius: 6px; }
 
 .btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
+/* ---------------- iOS export fallback ---------------- */
+.export-dialog {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgb(17 17 19 / 55%);
+}
+
+.export-dialog.is-hidden { display: none; }
+
+.export-dialog-card {
+  width: min(360px, 100%);
+  padding: 24px;
+  text-align: center;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 48px rgb(0 0 0 / 20%);
+}
+
+.export-dialog-card h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.export-dialog-card p {
+  margin: 8px 0 18px;
+  color: var(--muted);
+}
+
+.export-dialog-card img {
+  display: block;
+  width: min(256px, 100%);
+  height: auto;
+  margin: 0 auto 20px;
+  border: 1px solid var(--border);
+  -webkit-touch-callout: default;
+  user-select: auto;
+}
+
+.export-dialog-card .btn { width: 100%; }
+
 /* ---------------- toast ---------------- */
 .toast {
   position: fixed;

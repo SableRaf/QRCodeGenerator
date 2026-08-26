@@ -24,11 +24,17 @@ const elements = {
   note: document.querySelector("#note"),
   download: document.querySelector("#download"),
   copy: document.querySelector("#copy"),
+  exportDialog: document.querySelector("#export-dialog"),
+  exportDialogTitle: document.querySelector("#export-dialog-title"),
+  exportDialogInstruction: document.querySelector("#export-dialog-instruction"),
+  exportDialogImage: document.querySelector("#export-dialog-image"),
+  exportDialogClose: document.querySelector("#export-dialog-close"),
   toast: document.querySelector("#toast"),
 };
 
 let activeColor = elements.color.value.toUpperCase();
 let toastTimer;
+let dialogTrigger;
 
 function normalizeHex(value) {
   const compact = value.trim().replace(/^#/, "");
@@ -172,33 +178,103 @@ function showToast(message) {
   toastTimer = window.setTimeout(() => elements.toast.classList.remove("is-visible"), 2200);
 }
 
-function downloadQRCode() {
+function createPngBlob() {
+  const dataUrl = elements.preview.toDataURL("image/png");
+  const encoded = dataUrl.slice(dataUrl.indexOf(",") + 1);
+  const binary = window.atob(encoded);
+  const bytes = new Uint8Array(binary.length);
+
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+
+  return new Blob([bytes], { type: "image/png" });
+}
+
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent)
+    || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
+function canShareFile(file) {
+  if (typeof navigator.share !== "function" || typeof navigator.canShare !== "function") return false;
+
+  try {
+    return navigator.canShare({ files: [file] });
+  } catch (error) {
+    return false;
+  }
+}
+
+function showExportDialog(mode) {
+  const copying = mode === "copy";
+  dialogTrigger = document.activeElement;
+  elements.exportDialogTitle.textContent = copying ? "Copy QR code" : "Save QR code";
+  elements.exportDialogInstruction.textContent = copying
+    ? "Touch and hold the image, then choose Copy."
+    : "Touch and hold the image, then choose Save to Photos.";
+  elements.exportDialogImage.src = elements.preview.toDataURL("image/png");
+  elements.exportDialog.classList.remove("is-hidden");
+  elements.exportDialogClose.focus();
+}
+
+function closeExportDialog() {
+  elements.exportDialog.classList.add("is-hidden");
+  elements.exportDialogImage.removeAttribute("src");
+  if (dialogTrigger instanceof HTMLElement) dialogTrigger.focus();
+}
+
+function triggerFileDownload(blob) {
+  const objectUrl = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.download = "qr-code.png";
-  link.href = elements.preview.toDataURL("image/png");
+  link.href = objectUrl;
+  document.body.append(link);
   link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
   showToast("PNG downloaded");
 }
 
-async function copyQRCode() {
-  if (!navigator.clipboard || typeof ClipboardItem === "undefined") {
-    showToast("Image copying is not supported in this browser");
+async function downloadQRCode() {
+  const blob = createPngBlob();
+
+  if (!isIOS()) {
+    triggerFileDownload(blob);
+    return;
+  }
+
+  if (typeof File === "undefined") {
+    showExportDialog("save");
+    return;
+  }
+
+  const file = new File([blob], "qr-code.png", { type: "image/png" });
+
+  if (!canShareFile(file)) {
+    showExportDialog("save");
     return;
   }
 
   try {
-    const png = new Promise((resolve, reject) => {
-      elements.preview.toBlob((blob) => {
-        if (blob) resolve(blob);
-        else reject(new Error("Could not create PNG"));
-      }, "image/png");
-    });
-
-    await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
-    showToast("QR code copied");
+    await navigator.share({ files: [file], title: "QR code" });
   } catch (error) {
-    showToast("Could not copy the QR code");
+    if (error.name !== "AbortError") showExportDialog("save");
   }
+}
+
+function copyQRCode() {
+  if (!navigator.clipboard || typeof ClipboardItem === "undefined") {
+    showExportDialog("copy");
+    return;
+  }
+
+  // WebKit requires clipboard.write() to start during the tap handler. Build
+  // the PNG synchronously and pass a settled promise to preserve that gesture.
+  const png = Promise.resolve(createPngBlob());
+  navigator.clipboard.write([new ClipboardItem({ "image/png": png })])
+    .then(() => showToast("QR code copied"))
+    .catch(() => showExportDialog("copy"));
 }
 
 elements.content.addEventListener("input", renderQRCode);
@@ -216,6 +292,13 @@ elements.hex.addEventListener("blur", () => {
 elements.transparent.addEventListener("change", renderQRCode);
 elements.download.addEventListener("click", downloadQRCode);
 elements.copy.addEventListener("click", copyQRCode);
+elements.exportDialogClose.addEventListener("click", closeExportDialog);
+elements.exportDialog.addEventListener("click", (event) => {
+  if (event.target === elements.exportDialog) closeExportDialog();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !elements.exportDialog.classList.contains("is-hidden")) closeExportDialog();
+});
 
 createSwatches();
 renderQRCode();
