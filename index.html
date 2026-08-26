@@ -56,23 +56,49 @@
           <input id="content" type="text" value="https://example.com" spellcheck="false" autocomplete="off" />
         </div>
 
-        <div class="field">
-          <label for="size">Size: <span id="size-value">320</span>px</label>
-          <input id="size" class="range" type="range" min="64" max="1024" step="1" value="320" />
-        </div>
+        <section class="control-section" aria-label="Design">
+          <h3 class="control-title">Colours</h3>
 
-        <div class="field color-row">
-          <input id="color" type="color" value="#3B82F6" aria-label="QR code colour" />
-          <input id="hex" type="text" value="#3B82F6" spellcheck="false" autocomplete="off" aria-label="QR code colour, hex value" />
-        </div>
+          <div class="color-row">
+            <input id="color" type="color" value="#3B82F6" aria-label="QR code colour" />
+            <input id="hex" type="text" value="#3B82F6" spellcheck="false" autocomplete="off" aria-label="QR code colour, hex value" />
+          </div>
 
-        <div id="swatches" class="swatches" role="group" aria-label="Preset colours"></div>
+          <div id="swatches" class="swatches" role="group" aria-label="Preset colours"></div>
 
-        <label class="switch">
-          <input id="transparent" type="checkbox" checked />
-          <span class="pill" aria-hidden="true"></span>
-          <span class="switch-label">Transparent background</span>
-        </label>
+          <label class="switch">
+            <input id="transparent" type="checkbox" checked />
+            <span class="pill" aria-hidden="true"></span>
+            <span class="switch-label">Transparent background</span>
+          </label>
+        </section>
+
+        <section class="control-section" aria-label="Export">
+          <fieldset class="option-field">
+            <legend>Output size</legend>
+            <div class="size-options">
+              <div id="export-sizes" class="size-presets" role="group" aria-label="Preset output sizes">
+                <button type="button" data-size="256" aria-pressed="false" aria-label="Small, 256 pixels">S</button>
+                <button type="button" data-size="512" aria-pressed="true" aria-label="Medium, 512 pixels">M</button>
+                <button type="button" data-size="1024" aria-pressed="false" aria-label="Large, 1024 pixels">L</button>
+                <button type="button" data-size="2048" aria-pressed="false" aria-label="Extra large, 2048 pixels">XL</button>
+              </div>
+              <label id="custom-size-control" class="custom-size">
+                <select id="pixel-size" aria-label="Custom output size"></select>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="option-field">
+            <legend>Format</legend>
+            <div id="export-formats" class="segmented format-options">
+              <button type="button" data-format="png" aria-pressed="true">PNG</button>
+              <button type="button" data-format="jpg" aria-pressed="false">JPG</button>
+              <button type="button" data-format="svg" aria-pressed="false">SVG</button>
+              <button type="button" data-format="pdf" aria-pressed="false">PDF</button>
+            </div>
+          </fieldset>
+        </section>
       </section>
 
       <section class="card" aria-labelledby="preview-title">
@@ -86,8 +112,13 @@
             <div id="plate" class="plate is-transparent">
               <canvas id="preview" aria-label="Generated QR code preview"></canvas>
             </div>
+            <button id="copy" class="preview-copy" type="button" aria-label="Copy QR code to clipboard" title="Copy QR code">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3.5" y="3.5" width="13" height="13" rx="2.5" />
+                <rect x="7.5" y="7.5" width="13" height="13" rx="2.5" fill="var(--card)" />
+              </svg>
+            </button>
           </div>
-          <p id="note" class="note is-hidden"></p>
         </div>
 
         <div class="actions">
@@ -95,13 +126,7 @@
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 4v10m0 0 4-4m-4 4-4-4M4 20h16" />
             </svg>
-            Download PNG
-          </button>
-          <button id="copy" class="btn btn-ghost" type="button" aria-label="Copy QR code to clipboard">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3.5" y="3.5" width="13" height="13" rx="2.5" />
-              <rect x="7.5" y="7.5" width="13" height="13" rx="2.5" fill="var(--card)" />
-            </svg>
+            <span id="download-label">Download PNG</span>
           </button>
         </div>
       </section>
