@@ -400,20 +400,16 @@ input[type="color"]::-moz-color-swatch { border: none; border-radius: 6px; }
 }
 
 .preview-copy {
-  position: absolute;
-  z-index: 2;
-  top: -12px;
-  right: -12px;
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   color: var(--ink);
   background: rgb(255 255 255 / 92%);
   border: 1px solid rgb(17 17 19 / 12%);
   border-radius: 9px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
   backdrop-filter: blur(8px);
   cursor: pointer;
 }
